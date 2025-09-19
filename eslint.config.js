@@ -30,7 +30,7 @@ export default [
       "@typescript-eslint/no-unused-vars": "error",
 
       // Additional helpful rules
-      "no-console": "warn",
+      //   "no-console": "warn",
       "prefer-const": "error",
       "no-var": "error",
     },

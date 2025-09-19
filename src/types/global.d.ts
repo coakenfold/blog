@@ -1,11 +1,11 @@
 // types/global.d.ts
 // Ambient type declaration for extending the global Window interface
-
 declare global {
   interface Window {
     // Third-party libraries that might be loaded via script tags
-    gtag?: (...args: any[]) => void;
+    gtag: (a: string, b: string, c: unknown) => void;
     dataLayer?: any[];
+    webVitalsConfig: Record<string, any>;
     /*
     // Custom properties you might add to window
     myApp?: {
