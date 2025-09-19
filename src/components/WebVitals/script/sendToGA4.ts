@@ -65,7 +65,7 @@ export const sendToGA4 = ({ metrics, isDev, currentGaId }: SendToGA4) => {
     };
 
     // Send to GA4
-    window.gtag("event", metric.name, eventParams);
+    window.gtag("event", `${metric.name}-FE`, eventParams);
   });
 
   if (isDev) {
