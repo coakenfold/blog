@@ -8,9 +8,8 @@ export const sendToCustomEndpoint = ({
   metrics,
   isDev,
 }: SendToCustomEndpoint) => {
-  // Optional: Send batched data to your own analytics endpoint
   const body = JSON.stringify({
-    metrics: metrics,
+    metrics,
     page_url: window.location.href,
     user_agent: navigator.userAgent,
     timestamp: Date.now(),
