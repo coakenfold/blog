@@ -1,13 +1,31 @@
 import { onCLS, onINP, onLCP, onFCP, onTTFB } from "web-vitals/attribution";
+import { type GetAttributionDataReturn } from "./getAttributionData";
 import { addToQueue } from "./addToQueue.ts";
 import { flushQueue } from "./flushQueue";
-import type { WebVitalMetric } from "./types.ts";
+import { type WebVitalMetric } from "./types.ts";
+
+export type QueueEntry = {
+  // Standard metric properties
+  name: WebVitalMetric["name"];
+  value: WebVitalMetric["value"];
+  delta: WebVitalMetric["delta"];
+  id: WebVitalMetric["id"];
+  rating: WebVitalMetric["rating"];
+  navigationType: WebVitalMetric["navigationType"];
+
+  // Add environment context
+  environment: "development" | "production";
+  hostname: string;
+
+  // Timestamp for when this metric was captured
+  timestamp: number;
+} & Partial<GetAttributionDataReturn>;
 
 export interface InitializeWebVitals {
   shouldRunAnalytics: boolean;
   isDev: boolean;
   currentGaId: string;
-  queue: Set<WebVitalMetric>;
+  queue: Set<QueueEntry>;
 }
 
 export const initializeWebVitals = ({
@@ -41,6 +59,7 @@ export const initializeWebVitals = ({
         flushTimer = addToQueueFlushTimer;
       }
     };
+
     onCLS(onReport, { reportAllChanges: true });
     onINP(onReport, { reportAllChanges: true });
     onLCP(onReport, { reportAllChanges: true });
