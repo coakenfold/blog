@@ -53,7 +53,7 @@ export const addToQueue = ({
     ...getAttributionData({ metric }),
   });
 
-  // Optional: Set a timeout to flush queue if page stays open too long
+  // Set a timeout to flush queue if page stays open too long
   clearTimeout(flushTimer);
 
   return setTimeout(flushQueue, isDev ? 10000 : 30000); // Shorter flush in dev
