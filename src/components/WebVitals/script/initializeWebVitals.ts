@@ -25,7 +25,6 @@ export interface InitializeWebVitals {
   idGA4: string;
   isDev: boolean;
   queue: Set<QueueEntry>;
-  shouldEnableAnalytics: boolean;
   shouldEnableAnalyticsBE: boolean;
   shouldEnableAnalyticsFE: boolean;
 }
@@ -34,37 +33,32 @@ export const initializeWebVitals = ({
   idGA4,
   isDev,
   queue,
-  shouldEnableAnalytics,
   shouldEnableAnalyticsBE,
   shouldEnableAnalyticsFE,
 }: InitializeWebVitals) => {
   let flushTimer: ReturnType<typeof setTimeout>;
 
   // Set up metric collection - only if analytics should run
-  if (shouldEnableAnalytics) {
-    const onReport = (metric: WebVitalMetric) => {
-      const addToQueueFlushTimer = addToQueue({
-        metric,
-        shouldEnableAnalytics,
-        isDev,
-        flushTimer,
-        queue,
-        flushQueue: () => {
-          flushQueue({
-            flushTimer,
-            idGA4,
-            isDev,
-            queue,
-            shouldEnableAnalytics,
-            shouldEnableAnalyticsBE,
-            shouldEnableAnalyticsFE,
-          });
-        },
-      });
-      if (addToQueueFlushTimer) {
-        flushTimer = addToQueueFlushTimer;
-      }
-    };
+  const onReport = (metric: WebVitalMetric) => {
+    const addToQueueFlushTimer = addToQueue({
+      metric,
+      isDev,
+      flushTimer,
+      queue,
+      flushQueue: () => {
+        flushQueue({
+          flushTimer,
+          idGA4,
+          isDev,
+          queue,
+          shouldEnableAnalyticsBE,
+          shouldEnableAnalyticsFE,
+        });
+      },
+    });
+    if (addToQueueFlushTimer) {
+      flushTimer = addToQueueFlushTimer;
+    }
 
     onCLS(onReport, { reportAllChanges: true });
     onINP(onReport, { reportAllChanges: true });
@@ -76,12 +70,11 @@ export const initializeWebVitals = ({
       console.log("🚀 Web Vitals tracking initialized:", {
         environment: "development",
         idGA4: idGA4 || "none",
-        shouldEnableAnalytics,
         shouldEnableAnalyticsBE,
         shouldEnableAnalyticsFE,
       });
     }
-  }
+  };
 
   // Flush queue when page becomes hidden
   addEventListener("visibilitychange", () => {
@@ -91,7 +84,6 @@ export const initializeWebVitals = ({
         idGA4,
         isDev,
         queue,
-        shouldEnableAnalytics,
         shouldEnableAnalyticsBE,
         shouldEnableAnalyticsFE,
       });
@@ -105,7 +97,6 @@ export const initializeWebVitals = ({
       idGA4,
       isDev,
       queue,
-      shouldEnableAnalytics,
       shouldEnableAnalyticsBE,
       shouldEnableAnalyticsFE,
     });
@@ -126,7 +117,6 @@ export const initializeWebVitals = ({
             idGA4,
             isDev,
             queue,
-            shouldEnableAnalytics,
             shouldEnableAnalyticsBE,
             shouldEnableAnalyticsFE,
           });

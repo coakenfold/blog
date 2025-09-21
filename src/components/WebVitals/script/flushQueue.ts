@@ -6,7 +6,6 @@ export interface FlushQueue {
   idGA4: string;
   isDev: boolean;
   queue: any;
-  shouldEnableAnalytics: boolean;
   shouldEnableAnalyticsFE: boolean;
   shouldEnableAnalyticsBE: boolean;
 }
@@ -15,7 +14,6 @@ export const flushQueue = ({
   idGA4,
   isDev,
   queue,
-  shouldEnableAnalytics,
   shouldEnableAnalyticsFE,
   shouldEnableAnalyticsBE,
 }: FlushQueue) => {
@@ -42,16 +40,14 @@ export const flushQueue = ({
     console.groupEnd();
   }
 
-  if (shouldEnableAnalytics) {
-    // Send to Google Analytics 4
-    if (shouldEnableAnalyticsFE) {
-      sendToGA4({ metrics, isDev, idGA4 });
-    }
+  // Send to Google Analytics 4
+  if (shouldEnableAnalyticsFE) {
+    sendToGA4({ metrics, isDev, idGA4 });
+  }
 
-    // Optional: Also send to custom analytics endpoint
-    if (shouldEnableAnalyticsBE) {
-      sendToCustomEndpoint({ metrics, isDev });
-    }
+  // Optional: Also send to custom analytics endpoint
+  if (shouldEnableAnalyticsBE) {
+    sendToCustomEndpoint({ metrics, isDev });
   }
 
   // Clear the queue

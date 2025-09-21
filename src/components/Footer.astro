@@ -1,5 +1,10 @@
 ---
 import WebVitalsBatchedGA4 from "../components/WebVitals/WebVitalsBatchedGA4.astro";
+
+import { config } from "../config.ts";
+const { analytics } = config;
+const { shouldEnableAnalytics } = analytics;
+
 const today = new Date();
 ---
 
@@ -72,4 +77,4 @@ const today = new Date();
   }
 </style>
 
-<WebVitalsBatchedGA4 />
+{shouldEnableAnalytics && <WebVitalsBatchedGA4 />}

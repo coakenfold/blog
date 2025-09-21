@@ -9,7 +9,6 @@ export interface AddToQueue {
   isDev: boolean;
   metric: WebVitalMetric;
   queue: InitializeWebVitals["queue"];
-  shouldEnableAnalytics: boolean;
 }
 
 export const addToQueue = ({
@@ -18,18 +17,14 @@ export const addToQueue = ({
   isDev,
   metric,
   queue,
-  shouldEnableAnalytics,
 }: AddToQueue) => {
-  if (!shouldEnableAnalytics) {
-    if (isDev) {
-      console.log("🔍 Web Vitals (DEV):", {
-        name: metric.name,
-        value: metric.value,
-        rating: metric.rating,
-        attribution: metric.attribution,
-      });
-    }
-    return;
+  if (isDev) {
+    console.log("🔍 Web Vitals (DEV):", {
+      name: metric.name,
+      value: metric.value,
+      rating: metric.rating,
+      attribution: metric.attribution,
+    });
   }
 
   // Create enhanced metric object with attribution data
