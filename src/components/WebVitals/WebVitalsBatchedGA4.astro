@@ -1,19 +1,7 @@
 ---
 // src/components/WebVitals/WebVitalsBatchedGA4.astro
-export interface Props {
-  gaId?: string;
-  enableAnalytics?: boolean;
-}
-
-const { gaId, enableAnalytics = true } = Astro.props;
-const isDev = import.meta.env.DEV;
 ---
 
-<!-- Set global variables for the module script to use -->
-<script define:vars={{ gaId, enableAnalytics, isDev }}>
-  // Make config available globally for the module script
-  window.webVitalsConfig = { gaId, enableAnalytics, isDev };
-</script>
 <script>
   import "./script/index";
 </script>

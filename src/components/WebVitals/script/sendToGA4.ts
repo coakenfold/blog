@@ -3,9 +3,9 @@ import type { WebVitalMetric } from "./types";
 export interface SendToGA4 {
   metrics: WebVitalMetric[];
   isDev: boolean;
-  currentGaId: string;
+  idGA4: string;
 }
-export const sendToGA4 = ({ metrics, isDev, currentGaId }: SendToGA4) => {
+export const sendToGA4 = ({ metrics, isDev, idGA4 }: SendToGA4) => {
   // Check if gtag is available, if not, wait for it
   if (typeof window.gtag === "undefined") {
     if (isDev) {
@@ -15,7 +15,7 @@ export const sendToGA4 = ({ metrics, isDev, currentGaId }: SendToGA4) => {
     // Wait for gtag to be available, then retry
     const checkGtag = () => {
       if (typeof window.gtag !== "undefined") {
-        sendToGA4({ metrics, isDev, currentGaId });
+        sendToGA4({ metrics, isDev, idGA4 });
       } else {
         // Retry after a short delay, up to 10 times (5 seconds total)
         setTimeout(checkGtag, 500);
@@ -65,10 +65,10 @@ export const sendToGA4 = ({ metrics, isDev, currentGaId }: SendToGA4) => {
     };
 
     // Send to GA4
-    window.gtag("event", `${metric.name}-FE`, eventParams);
+    window.gtag("event", `${metric.name}_FE`, eventParams);
   });
 
   if (isDev) {
-    console.log(`✅ Sent ${metrics.length} metrics to GA4 (${currentGaId})`);
+    console.log(`✅ Sent ${metrics.length} metrics to GA4 (${idGA4})`);
   }
 };

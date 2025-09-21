@@ -1,38 +1,17 @@
 // types/global.d.ts
 // Ambient type declaration for extending the global Window interface
+import { Config } from "../config";
 declare global {
   interface Window {
-    // Third-party libraries that might be loaded via script tags
-    gtag: (a: string, b: string, c: unknown) => void;
+    gtag: (
+      command: "config" | "event" | "js" | "consent",
+      targetId: string,
+      parameters?: { [key: string]: any }
+    ) => void;
     dataLayer?: any[];
-    webVitalsConfig: Record<string, any>;
-    /*
-    // Custom properties you might add to window
-    myApp?: {
-      version: string;
-      config: Record<string, any>;
+    "ca.oakenfold.blog": {
+      config: Config;
     };
-    // Custom functions
-    customAnalytics?: {
-      track: (event: string, properties?: Record<string, any>) => void;
-      identify: (userId: string) => void;
-    };
-    
-    // Environment variables (if injected at build time)
-    ENV?: {
-      NODE_ENV: 'development' | 'production' | 'test';
-      API_URL: string;
-      VERSION: string;
-    };
-    
-    // Web APIs that might need additional typing
-    webkitSpeechRecognition?: any;
-    SpeechRecognition?: any;
-    
-    // Development tools
-    __REDUX_DEVTOOLS_EXTENSION__?: any;
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any;
-    */
   }
 }
 

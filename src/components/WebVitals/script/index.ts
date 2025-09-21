@@ -1,14 +1,22 @@
 import { initializeWebVitals } from "./initializeWebVitals";
 import { type QueueEntry } from "./initializeWebVitals";
-// Get config from global variables set by Astro
-const config = window.webVitalsConfig || {};
-const { gaId, enableAnalytics = true, isDev = false } = config;
+
+// Get config from global variables
+const nameSpace = window["ca.oakenfold.blog"] || {};
+const {
+  idGA4,
+  shouldEnableAnalytics = false,
+  shouldEnableAnalyticsFE = false,
+  shouldEnableAnalyticsBE = false,
+} = nameSpace.config.analytics;
 
 const callInitializeWebVitals = () => {
   initializeWebVitals({
-    shouldRunAnalytics: enableAnalytics,
-    isDev,
-    currentGaId: gaId,
+    shouldEnableAnalytics,
+    shouldEnableAnalyticsFE,
+    shouldEnableAnalyticsBE,
+    isDev: nameSpace.config.isDev,
+    idGA4,
     queue: new Set<QueueEntry>(),
   });
 };

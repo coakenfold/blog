@@ -2,18 +2,22 @@ import { sendToGA4 } from "./sendToGA4";
 import { sendToCustomEndpoint } from "./sendToCustomEndpoint";
 import type { WebVitalMetric } from "./types";
 export interface FlushQueue {
-  queue: any;
   flushTimer: any;
+  idGA4: string;
   isDev: boolean;
-  shouldRunAnalytics: any;
-  currentGaId: string;
+  queue: any;
+  shouldEnableAnalytics: boolean;
+  shouldEnableAnalyticsFE: boolean;
+  shouldEnableAnalyticsBE: boolean;
 }
 export const flushQueue = ({
-  queue,
   flushTimer,
+  idGA4,
   isDev,
-  shouldRunAnalytics,
-  currentGaId,
+  queue,
+  shouldEnableAnalytics,
+  shouldEnableAnalyticsFE,
+  shouldEnableAnalyticsBE,
 }: FlushQueue) => {
   if (queue.size === 0) return;
 
@@ -38,14 +42,16 @@ export const flushQueue = ({
     console.groupEnd();
   }
 
-  // Send to Google Analytics 4
-  if (shouldRunAnalytics) {
-    sendToGA4({ metrics, isDev, currentGaId });
-  }
+  if (shouldEnableAnalytics) {
+    // Send to Google Analytics 4
+    if (shouldEnableAnalyticsFE) {
+      sendToGA4({ metrics, isDev, idGA4 });
+    }
 
-  // Optional: Also send to custom analytics endpoint
-  if (shouldRunAnalytics || isDev) {
-    sendToCustomEndpoint({ metrics, isDev });
+    // Optional: Also send to custom analytics endpoint
+    if (shouldEnableAnalyticsBE) {
+      sendToCustomEndpoint({ metrics, isDev });
+    }
   }
 
   // Clear the queue

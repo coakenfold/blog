@@ -4,23 +4,23 @@ import { type WebVitalMetric } from "./types";
 import { type InitializeWebVitals } from "./initializeWebVitals";
 
 export interface AddToQueue {
-  metric: WebVitalMetric;
-  shouldRunAnalytics: boolean;
-  isDev: boolean;
-  queue: InitializeWebVitals["queue"];
-  flushTimer: ReturnType<typeof setTimeout>;
   flushQueue: () => void;
+  flushTimer: ReturnType<typeof setTimeout>;
+  isDev: boolean;
+  metric: WebVitalMetric;
+  queue: InitializeWebVitals["queue"];
+  shouldEnableAnalytics: boolean;
 }
 
 export const addToQueue = ({
-  metric,
-  shouldRunAnalytics,
-  isDev,
-  queue,
-  flushTimer,
   flushQueue,
+  flushTimer,
+  isDev,
+  metric,
+  queue,
+  shouldEnableAnalytics,
 }: AddToQueue) => {
-  if (!shouldRunAnalytics) {
+  if (!shouldEnableAnalytics) {
     if (isDev) {
       console.log("🔍 Web Vitals (DEV):", {
         name: metric.name,
@@ -35,12 +35,12 @@ export const addToQueue = ({
   // Create enhanced metric object with attribution data
   queue.add({
     // Standard metric properties
-    name: metric.name,
-    value: metric.value,
     delta: metric.delta,
     id: metric.id,
-    rating: metric.rating,
+    name: metric.name,
     navigationType: metric.navigationType,
+    rating: metric.rating,
+    value: metric.value,
 
     // Add environment context
     environment: isDev ? "development" : "production",
@@ -55,5 +55,6 @@ export const addToQueue = ({
 
   // Optional: Set a timeout to flush queue if page stays open too long
   clearTimeout(flushTimer);
+
   return setTimeout(flushQueue, isDev ? 10000 : 30000); // Shorter flush in dev
 };

@@ -1,17 +1,17 @@
 import { onCLS, onINP, onLCP, onFCP, onTTFB } from "web-vitals/attribution";
-import { type GetAttributionDataReturn } from "./getAttributionData";
+import { type GetAttributionDataReturn } from "./getAttributionData.ts";
 import { addToQueue } from "./addToQueue.ts";
-import { flushQueue } from "./flushQueue";
+import { flushQueue } from "./flushQueue.ts";
 import { type WebVitalMetric } from "./types.ts";
 
 export type QueueEntry = {
   // Standard metric properties
-  name: WebVitalMetric["name"];
-  value: WebVitalMetric["value"];
   delta: WebVitalMetric["delta"];
   id: WebVitalMetric["id"];
-  rating: WebVitalMetric["rating"];
+  name: WebVitalMetric["name"];
   navigationType: WebVitalMetric["navigationType"];
+  rating: WebVitalMetric["rating"];
+  value: WebVitalMetric["value"];
 
   // Add environment context
   environment: "development" | "production";
@@ -22,36 +22,42 @@ export type QueueEntry = {
 } & Partial<GetAttributionDataReturn>;
 
 export interface InitializeWebVitals {
-  shouldRunAnalytics: boolean;
+  idGA4: string;
   isDev: boolean;
-  currentGaId: string;
   queue: Set<QueueEntry>;
+  shouldEnableAnalytics: boolean;
+  shouldEnableAnalyticsBE: boolean;
+  shouldEnableAnalyticsFE: boolean;
 }
 
 export const initializeWebVitals = ({
-  shouldRunAnalytics,
+  idGA4,
   isDev,
-  currentGaId,
   queue,
+  shouldEnableAnalytics,
+  shouldEnableAnalyticsBE,
+  shouldEnableAnalyticsFE,
 }: InitializeWebVitals) => {
   let flushTimer: ReturnType<typeof setTimeout>;
 
   // Set up metric collection - only if analytics should run
-  if (shouldRunAnalytics || isDev) {
+  if (shouldEnableAnalytics) {
     const onReport = (metric: WebVitalMetric) => {
       const addToQueueFlushTimer = addToQueue({
         metric,
-        shouldRunAnalytics,
+        shouldEnableAnalytics,
         isDev,
         flushTimer,
         queue,
         flushQueue: () => {
           flushQueue({
-            queue,
             flushTimer,
+            idGA4,
             isDev,
-            shouldRunAnalytics,
-            currentGaId,
+            queue,
+            shouldEnableAnalytics,
+            shouldEnableAnalyticsBE,
+            shouldEnableAnalyticsFE,
           });
         },
       });
@@ -69,8 +75,10 @@ export const initializeWebVitals = ({
     if (isDev) {
       console.log("🚀 Web Vitals tracking initialized:", {
         environment: "development",
-        gaId: currentGaId || "none",
-        analyticsEnabled: shouldRunAnalytics,
+        idGA4: idGA4 || "none",
+        shouldEnableAnalytics,
+        shouldEnableAnalyticsBE,
+        shouldEnableAnalyticsFE,
       });
     }
   }
@@ -79,11 +87,13 @@ export const initializeWebVitals = ({
   addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
       flushQueue({
-        queue,
         flushTimer,
+        idGA4,
         isDev,
-        shouldRunAnalytics,
-        currentGaId,
+        queue,
+        shouldEnableAnalytics,
+        shouldEnableAnalyticsBE,
+        shouldEnableAnalyticsFE,
       });
     }
   });
@@ -91,11 +101,13 @@ export const initializeWebVitals = ({
   // Flush queue before page unloads (fallback)
   addEventListener("beforeunload", () => {
     flushQueue({
-      queue,
       flushTimer,
+      idGA4,
       isDev,
-      shouldRunAnalytics,
-      currentGaId,
+      queue,
+      shouldEnableAnalytics,
+      shouldEnableAnalyticsBE,
+      shouldEnableAnalyticsFE,
     });
   });
 
@@ -110,11 +122,13 @@ export const initializeWebVitals = ({
             console.log("⏰ Flushing queue due to user inactivity");
           }
           flushQueue({
-            queue,
             flushTimer,
+            idGA4,
             isDev,
-            shouldRunAnalytics,
-            currentGaId,
+            queue,
+            shouldEnableAnalytics,
+            shouldEnableAnalyticsBE,
+            shouldEnableAnalyticsFE,
           });
         }
       },

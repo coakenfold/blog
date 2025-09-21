@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 
-export function loadConfig(configPath = "") {
+export function loadJSON(configPath = "") {
   try {
     const config = JSON.parse(readFileSync(configPath, "utf8"));
     return config;

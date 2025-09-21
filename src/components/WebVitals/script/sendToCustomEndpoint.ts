@@ -1,19 +1,19 @@
 import type { WebVitalMetric } from "./types";
 
 export interface SendToCustomEndpoint {
-  metrics: WebVitalMetric[];
   isDev: boolean;
+  metrics: WebVitalMetric[];
 }
 export const sendToCustomEndpoint = ({
-  metrics,
   isDev,
+  metrics,
 }: SendToCustomEndpoint) => {
   const body = JSON.stringify({
+    environment: isDev ? "development" : "production",
     metrics,
     page_url: window.location.href,
-    user_agent: navigator.userAgent,
     timestamp: Date.now(),
-    environment: isDev ? "development" : "production",
+    user_agent: navigator.userAgent,
   });
 
   const endpoint = isDev ? "/api/analytics-dev" : "/api/analytics";

@@ -1,8 +1,6 @@
 ---
 import WebVitalsBatchedGA4 from "../components/WebVitals/WebVitalsBatchedGA4.astro";
 const today = new Date();
-const gaId = import.meta.env.PUBLIC_GA_ID;
-const enableAnalytics = import.meta.env.PUBLIC_ENABLE_ANALYTICS === "true";
 ---
 
 <footer>
@@ -74,4 +72,4 @@ const enableAnalytics = import.meta.env.PUBLIC_ENABLE_ANALYTICS === "true";
   }
 </style>
 
-<WebVitalsBatchedGA4 gaId={gaId} enableAnalytics={enableAnalytics} />
+<WebVitalsBatchedGA4 />
