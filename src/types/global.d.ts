@@ -9,9 +9,7 @@ declare global {
       parameters?: { [key: string]: any }
     ) => void;
     dataLayer?: any[];
-    "ca.oakenfold.blog": {
-      config: Config;
-    };
+    "ca.oakenfold.blog": Config;
   }
 }
 
