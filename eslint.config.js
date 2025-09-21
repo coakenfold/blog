@@ -8,6 +8,7 @@ export default [
   js.configs.recommended,
   ...astroPlugin.configs.recommended,
   {
+    ignorePatterns: ["**/*.d.ts"],
     files: ["**/*.{js,mjs,cjs,ts,tsx,astro}"],
     languageOptions: {
       parser: tsParser,
