@@ -1,7 +1,7 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
-import "../styles/global.css";
+// ONLY CRITICAL CSS HERE
+import "../styles/critical.css";
+
 import type { ImageMetadata } from "astro";
 import FallbackImage from "../assets/blog-placeholder-1.jpg";
 import { SITE_TITLE } from "../consts";
@@ -24,7 +24,8 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image = FallbackImage } = Astro.props;
 ---
-
+<link rel="preload" href="/styles/fonts.sans.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/styles/fonts.mono.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -38,21 +39,6 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Font preloads -->
-<link
-  rel="preload"
-  href="/fonts/atkinson-regular.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/atkinson-bold.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
