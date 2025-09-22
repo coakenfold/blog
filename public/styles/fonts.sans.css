@@ -71,7 +71,9 @@
     U+ECE0, U+EFCC;
 }
 @font-face {
-  font-display: swap;
+  /* -10ms w/block */
+  font-display: block;
+  /* font-display: swap; */
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 700;
