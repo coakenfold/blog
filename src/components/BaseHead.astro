@@ -3,7 +3,7 @@
 import "../styles/critical.css";
 
 import type { ImageMetadata } from "astro";
-import FallbackImage from "../assets/blog-placeholder-1.jpg";
+import FallbackImage from "../assets/blog-placeholder-1.webp";
 import { SITE_TITLE } from "../consts";
 
 import {config} from '../config.ts';
@@ -26,6 +26,8 @@ const { title, description, image = FallbackImage } = Astro.props;
 ---
 <link rel="preload" href="/styles/fonts.sans.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="preload" href="/styles/fonts.mono.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -58,8 +60,7 @@ const { title, description, image = FallbackImage } = Astro.props;
   };
 </script>
 
-<!-- Google Analytics 4 - conditionally loaded -->
- {shouldLoadGA4 && shouldEnableAnalyticsFE && (
+{shouldLoadGA4 && shouldEnableAnalyticsFE && (
     <script data-note="GA4:3PI" async src={`https://www.googletagmanager.com/gtag/js?id=${idGA4}`}></script>
 )}
 {shouldEnableAnalytics && (
