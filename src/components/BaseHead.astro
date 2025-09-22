@@ -24,6 +24,23 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image = FallbackImage } = Astro.props;
 ---
+
+<!-- Font preloads -->
+<link
+  rel="preload"
+  href="/fonts/split/woff2/IBMPlexSans/IBMPlexSans-Bold-Latin1.woff2"
+  as="font"
+  type="font/woff"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/split/woff2/IBMPlexSans/IBMPlexSans-Regular-Latin1.woff2"
+  as="font"
+  type="font/woff"
+  crossorigin
+/>
+
 <link rel="preload" href="/styles/fonts.sans.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="preload" href="/styles/fonts.mono.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
@@ -40,7 +57,6 @@ const { title, description, image = FallbackImage } = Astro.props;
   href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
-
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
