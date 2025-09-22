@@ -8,7 +8,7 @@ import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "http://localhost:4321",
+  site: "https://localhost:4321",
   integrations: [mdx(), sitemap()],
 
   adapter: node({
