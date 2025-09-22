@@ -1,0 +1,31 @@
+localhost:4321 {
+	root * ./dist/client
+    
+	# Self signed
+    tls internal
+    
+    # Enable compression
+	encode {
+        gzip
+    }
+
+	# Long cache for static assets
+	@static {
+		path *.webp *.css *.js *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2
+	}
+	header @static Cache-Control "public, max-age=31536000, immutable"
+
+	# Medium cache for HTML
+	@html {
+		path *.html
+	}
+	header @html Cache-Control "public, max-age=3600"
+
+	# No cache for API responses
+	@api {
+		path /api/*
+	}
+	header @api Cache-Control "no-cache, no-store, must-revalidate"
+
+	file_server
+}
