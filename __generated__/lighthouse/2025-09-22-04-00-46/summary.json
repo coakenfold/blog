@@ -1,0 +1,113 @@
+{
+  "totalUrls": 8,
+  "passedUrls": 7,
+  "failedUrls": 1,
+  "totalViolations": 1,
+  "timestamp": "2025-09-22T04:00:46.479Z",
+  "results": [
+    {
+      "url": "https://localhost:4321/",
+      "passed": true,
+      "violationCount": 0,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1080,
+        "CLS": 0,
+        "FCP": 815,
+        "SI": 815
+      }
+    },
+    {
+      "url": "https://localhost:4321/about/",
+      "passed": true,
+      "violationCount": 0,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1380,
+        "CLS": 0,
+        "FCP": 804,
+        "SI": 804
+      }
+    },
+    {
+      "url": "https://localhost:4321/blog/",
+      "passed": true,
+      "violationCount": 0,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1080,
+        "CLS": 0,
+        "FCP": 806,
+        "SI": 806
+      }
+    },
+    {
+      "url": "https://localhost:4321/blog/first-post/",
+      "passed": true,
+      "violationCount": 0,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1380,
+        "CLS": 0,
+        "FCP": 802,
+        "SI": 802
+      }
+    },
+    {
+      "url": "https://localhost:4321/blog/markdown-style-guide/",
+      "passed": false,
+      "violationCount": 1,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1650,
+        "CLS": 0,
+        "FCP": 1350,
+        "SI": 1350
+      }
+    },
+    {
+      "url": "https://localhost:4321/blog/second-post/",
+      "passed": true,
+      "violationCount": 0,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1350,
+        "CLS": 0,
+        "FCP": 773,
+        "SI": 773
+      }
+    },
+    {
+      "url": "https://localhost:4321/blog/third-post/",
+      "passed": true,
+      "violationCount": 0,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1380,
+        "CLS": 0,
+        "FCP": 801,
+        "SI": 801
+      }
+    },
+    {
+      "url": "https://localhost:4321/blog/using-mdx/",
+      "passed": true,
+      "violationCount": 0,
+      "lighthouseScore": 100,
+      "metrics": {
+        "TBT": 0,
+        "LCP": 1350,
+        "CLS": 0,
+        "FCP": 774,
+        "SI": 774
+      }
+    }
+  ]
+}
