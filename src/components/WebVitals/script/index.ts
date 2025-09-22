@@ -5,17 +5,15 @@ import { type QueueEntry } from "./initializeWebVitals";
 const nameSpace = window["ca.oakenfold.blog"] || {};
 const {
   idGA4,
-  shouldEnableAnalytics = false,
   shouldEnableAnalyticsFE = false,
   shouldEnableAnalyticsBE = false,
-} = nameSpace.config.analytics;
+} = nameSpace.analytics;
 
 const callInitializeWebVitals = () => {
   initializeWebVitals({
-    shouldEnableAnalytics,
     shouldEnableAnalyticsFE,
     shouldEnableAnalyticsBE,
-    isDev: nameSpace.config.isDev,
+    isDev: nameSpace.isDev,
     idGA4,
     queue: new Set<QueueEntry>(),
   });

@@ -1,8 +1,9 @@
+// ERRORS
 import { onCLS, onINP, onLCP, onFCP, onTTFB } from "web-vitals/attribution";
-import { type GetAttributionDataReturn } from "./getAttributionData.ts";
-import { addToQueue } from "./addToQueue.ts";
-import { flushQueue } from "./flushQueue.ts";
-import { type WebVitalMetric } from "./types.ts";
+import { type GetAttributionDataReturn } from "../getAttributionData.ts";
+import { addToQueue } from "../addToQueue.ts";
+import { flushQueue } from "../flushQueue.ts";
+import { type WebVitalMetric } from "../types.ts";
 
 export type QueueEntry = {
   // Standard metric properties
@@ -38,6 +39,7 @@ export const initializeWebVitals = ({
 }: InitializeWebVitals) => {
   let flushTimer: ReturnType<typeof setTimeout>;
 
+  // Set up metric collection - only if analytics should run
   const onReport = (metric: WebVitalMetric) => {
     const addToQueueFlushTimer = addToQueue({
       metric,
@@ -58,22 +60,22 @@ export const initializeWebVitals = ({
     if (addToQueueFlushTimer) {
       flushTimer = addToQueueFlushTimer;
     }
+
+    onCLS(onReport, { reportAllChanges: true });
+    onINP(onReport, { reportAllChanges: true });
+    onLCP(onReport, { reportAllChanges: true });
+    onFCP(onReport);
+    onTTFB(onReport);
+
+    if (isDev) {
+      console.log("🚀 Web Vitals tracking initialized:", {
+        environment: "development",
+        idGA4: idGA4 || "none",
+        shouldEnableAnalyticsBE,
+        shouldEnableAnalyticsFE,
+      });
+    }
   };
-
-  onCLS(onReport, { reportAllChanges: true });
-  onINP(onReport, { reportAllChanges: true });
-  onLCP(onReport, { reportAllChanges: true });
-  onFCP(onReport);
-  onTTFB(onReport);
-
-  if (isDev) {
-    console.log("🚀 Web Vitals tracking initialized:", {
-      environment: "development",
-      idGA4: idGA4 || "none",
-      shouldEnableAnalyticsBE,
-      shouldEnableAnalyticsFE,
-    });
-  }
 
   // Flush queue when page becomes hidden
   addEventListener("visibilitychange", () => {
