@@ -9,10 +9,13 @@ import * as chromeLauncher from "chrome-launcher";
 const timestamp = new Date().toISOString();
 const timestampFilename = timestamp.slice(0, 19).replace(/[T:]/g, "-");
 // Results in: "2025-09-21-14-30-45" (removes milliseconds and Z)
+
 // Configuration
 const CONFIG = {
-  sitemapPath: "./dist/client/sitemap-0.xml",
+  sitemapPath: "./dist/sitemap-0.xml",
   outputDir: `./__generated__/lighthouse/${timestampFilename}`,
+  runs: 3, // Number of runs to perform for each URL
+  cooldownMs: 2000, // Cooldown between runs in milliseconds
   thresholds: {
     TBT: { max: 0, violationHandler: "console.error" }, // Total Blocking Time
     LCP: { max: 1514, violationHandler: "console.error" }, // Largest Contentful Paint
@@ -33,6 +36,51 @@ class LighthouseSitemapTester {
     this.config = config;
     this.results = [];
     this.violations = [];
+  }
+
+  /**
+   * Calculate median value from an array of numbers
+   */
+  calculateMedian(values) {
+    const sorted = [...values].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+
+    if (sorted.length % 2 === 0) {
+      return (sorted[mid - 1] + sorted[mid]) / 2;
+    }
+    return sorted[mid];
+  }
+
+  /**
+   * Calculate median metrics from multiple runs
+   */
+  calculateMedianMetrics(runs) {
+    const metricKeys = ["TBT", "LCP", "CLS", "FCP", "SI"];
+    const medianMetrics = {};
+
+    metricKeys.forEach((key) => {
+      const values = runs.map((run) => run.metrics[key]);
+      let median = this.calculateMedian(values);
+
+      // Round appropriately based on metric type
+      if (key === "CLS") {
+        median = parseFloat(median.toFixed(3));
+      } else {
+        median = Math.round(median);
+      }
+
+      medianMetrics[key] = median;
+    });
+
+    return medianMetrics;
+  }
+
+  /**
+   * Calculate median Lighthouse score from multiple runs
+   */
+  calculateMedianLighthouseScore(runs) {
+    const scores = runs.map((run) => run.lighthouseScore);
+    return Math.round(this.calculateMedian(scores));
   }
 
   /**
@@ -73,8 +121,6 @@ class LighthouseSitemapTester {
     let chrome;
 
     try {
-      console.log(`🔍 Testing: ${url}`);
-
       chrome = await chromeLauncher.launch({
         chromeFlags: this.config.chromeFlags,
       });
@@ -114,7 +160,7 @@ class LighthouseSitemapTester {
   /**
    * Check if metrics violate thresholds and handle violations
    */
-  checkViolations(url, metrics) {
+  checkViolations(url, metrics, runNumber = null) {
     const violations = [];
 
     Object.entries(this.config.thresholds).forEach(([metric, config]) => {
@@ -122,21 +168,23 @@ class LighthouseSitemapTester {
       const threshold = config.max;
 
       if (value > threshold) {
+        const runInfo = runNumber ? ` (run ${runNumber})` : "";
         const violation = {
           url,
           metric,
           value,
           threshold,
-          message: `${metric} violation: ${value} > ${threshold}`,
+          runNumber,
+          message: `${metric} violation: ${value} > ${threshold}${runInfo}`,
         };
 
         violations.push(violation);
 
         // Handle violation based on configuration
         if (config.violationHandler === "console.error") {
-          console.error(`❌ ${url} - ${violation.message}`);
+          console.error(`❌ ${url}${runInfo} - ${violation.message}`);
         } else if (config.violationHandler === "console.log") {
-          console.log(`⚠️  ${url} - ${violation.message}`);
+          console.log(`⚠️  ${url}${runInfo} - ${violation.message}`);
         }
       }
     });
@@ -145,9 +193,61 @@ class LighthouseSitemapTester {
   }
 
   /**
+   * Perform multiple runs for a single URL
+   */
+  async performMultipleRuns(url) {
+    console.log(`🔍 Testing: ${url} (${this.config.runs} runs)`);
+
+    const runs = [];
+
+    for (let i = 1; i <= this.config.runs; i++) {
+      try {
+        console.log(`  📊 Run ${i}/${this.config.runs}...`);
+
+        const lighthouseResult = await this.runLighthouseTest(url);
+        const metrics = this.extractMetrics(lighthouseResult);
+        const violations = this.checkViolations(url, metrics, i);
+        const lighthouseScore = Math.round(
+          lighthouseResult.categories.performance.score * 100
+        );
+
+        runs.push({
+          runNumber: i,
+          metrics,
+          violations,
+          lighthouseScore,
+          lighthouseResult,
+        });
+
+        // Add cooldown between runs (except for the last run)
+        if (i < this.config.runs && this.config.cooldownMs > 0) {
+          await new Promise((resolve) =>
+            setTimeout(resolve, this.config.cooldownMs)
+          );
+        }
+      } catch (error) {
+        console.error(`💥 Failed run ${i} for ${url}: ${error.message}`);
+        // Continue with remaining runs even if one fails
+      }
+    }
+
+    if (runs.length === 0) {
+      throw new Error(`All runs failed for ${url}`);
+    }
+
+    return runs;
+  }
+
+  /**
    * Save detailed results to JSON file
    */
-  async saveResults(url, metrics, violations, lighthouseResult) {
+  async saveResults(
+    url,
+    runs,
+    medianMetrics,
+    medianViolations,
+    medianLighthouseScore
+  ) {
     // Ensure output directory exists
     await fs.mkdir(this.config.outputDir, { recursive: true });
 
@@ -158,11 +258,24 @@ class LighthouseSitemapTester {
     const result = {
       url,
       timestamp: new Date().toISOString(),
-      metrics,
-      violations,
-      passed: violations.length === 0,
-      lighthouseScore: lighthouseResult.categories.performance.score * 100,
-      rawLighthouseData: lighthouseResult,
+      totalRuns: runs.length,
+      successfulRuns: runs.length,
+      medianMetrics,
+      medianViolations,
+      medianLighthouseScore,
+      passed: medianViolations.length === 0,
+      calculator: `https://googlechrome.github.io/lighthouse/scorecalc/#FCP=${medianMetrics.FCP}&SI=${medianMetrics.SI}&LCP=${medianMetrics.LCP}&TBT=${medianMetrics.TBT}&CLS=${medianMetrics.CLS}&device=mobile&version=10`,
+      individualRuns: runs.map((run) => ({
+        runNumber: run.runNumber,
+        metrics: run.metrics,
+        violations: run.violations,
+        lighthouseScore: run.lighthouseScore,
+        passed: run.violations.length === 0,
+      })),
+      // Keep one raw Lighthouse result for reference (median run or first available)
+      rawLighthouseData:
+        runs[Math.floor(runs.length / 2)]?.lighthouseResult ||
+        runs[0].lighthouseResult,
     };
 
     await fs.writeFile(filepath, JSON.stringify(result, null, 2));
@@ -175,17 +288,20 @@ class LighthouseSitemapTester {
   async generateSummary() {
     const summary = {
       totalUrls: this.results.length,
+      runsPerUrl: this.config.runs,
       passedUrls: this.results.filter((r) => r.passed).length,
       failedUrls: this.results.filter((r) => !r.passed).length,
       totalViolations: this.violations.length,
       timestamp,
       results: this.results.map((r) => ({
         url: r.url,
-        calculator: `https://googlechrome.github.io/lighthouse/scorecalc/#FCP=${r.metrics.FCP}&SI=${r.metrics.SI}&LCP=${r.metrics.LCP}&TBT=${r.metrics.TBT}&CLS=${r.metrics.CLS}&device=mobile&version=10`,
+        calculator: r.calculator,
         passed: r.passed,
-        violationCount: r.violations.length,
-        lighthouseScore: r.lighthouseScore,
-        metrics: r.metrics,
+        violationCount: r.medianViolations.length,
+        medianLighthouseScore: r.medianLighthouseScore,
+        medianMetrics: r.medianMetrics,
+        totalRuns: r.totalRuns,
+        successfulRuns: r.successfulRuns,
       })),
     };
 
@@ -196,6 +312,7 @@ class LighthouseSitemapTester {
     console.log("\n📊 SUMMARY REPORT");
     console.log("=================");
     console.log(`Total URLs tested: ${summary.totalUrls}`);
+    console.log(`Runs per URL: ${summary.runsPerUrl}`);
     console.log(`✅ Passed: ${summary.passedUrls}`);
     console.log(`❌ Failed: ${summary.failedUrls}`);
     console.log(`Total violations: ${summary.totalViolations}`);
@@ -212,6 +329,8 @@ class LighthouseSitemapTester {
       console.log("🚀 Starting Lighthouse Sitemap Performance Tests");
       console.log(`📋 Sitemap: ${this.config.sitemapPath}`);
       console.log(`📁 Output: ${this.config.outputDir}`);
+      console.log(`🔄 Runs per URL: ${this.config.runs}`);
+      console.log(`⏱️  Cooldown: ${this.config.cooldownMs}ms`);
       console.log("");
 
       // Parse sitemap
@@ -221,25 +340,39 @@ class LighthouseSitemapTester {
       // Test each URL
       for (const url of urls) {
         try {
-          const lighthouseResult = await this.runLighthouseTest(url);
-          const metrics = this.extractMetrics(lighthouseResult);
-          const violations = this.checkViolations(url, metrics);
+          const runs = await this.performMultipleRuns(url);
+
+          // Calculate median values
+          const medianMetrics = this.calculateMedianMetrics(runs);
+          const medianLighthouseScore =
+            this.calculateMedianLighthouseScore(runs);
+          const medianViolations = this.checkViolations(url, medianMetrics);
 
           // Save detailed results
           const result = await this.saveResults(
             url,
-            metrics,
-            violations,
-            lighthouseResult
+            runs,
+            medianMetrics,
+            medianViolations,
+            medianLighthouseScore
           );
 
           this.results.push(result);
-          this.violations.push(...violations);
+          this.violations.push(...medianViolations);
 
           // Console output for passed tests
-          if (violations.length === 0) {
-            console.log(`✅ ${url} - All metrics passed`);
+          if (medianViolations.length === 0) {
+            console.log(
+              `✅ ${url} - All median metrics passed (${runs.length} runs)`
+            );
           }
+
+          console.log(
+            `  📈 Median Lighthouse Score: ${medianLighthouseScore}/100`
+          );
+          console.log(
+            `  📊 Median Metrics: TBT:${medianMetrics.TBT}ms, LCP:${medianMetrics.LCP}ms, CLS:${medianMetrics.CLS}, FCP:${medianMetrics.FCP}ms, SI:${medianMetrics.SI}ms\n`
+          );
         } catch (error) {
           console.error(`💥 Failed to test ${url}: ${error.message}`);
         }
@@ -267,6 +400,12 @@ args.forEach((arg, index) => {
   }
   if (arg === "--output" && args[index + 1]) {
     customConfig.outputDir = args[index + 1];
+  }
+  if (arg === "--runs" && args[index + 1]) {
+    customConfig.runs = parseInt(args[index + 1], 10);
+  }
+  if (arg === "--cooldown" && args[index + 1]) {
+    customConfig.cooldownMs = parseInt(args[index + 1], 10);
   }
 });
 

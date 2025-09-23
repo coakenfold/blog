@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blog",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2025-03-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "workers_dev": true,
+  "env": {
+    "development": {},
+    "staging": {},
+    "production": {}
+  }
+}

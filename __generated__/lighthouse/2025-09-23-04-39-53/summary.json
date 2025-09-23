@@ -1,0 +1,138 @@
+{
+  "totalUrls": 8,
+  "runsPerUrl": 3,
+  "passedUrls": 6,
+  "failedUrls": 2,
+  "totalViolations": 2,
+  "timestamp": "2025-09-23T04:39:53.626Z",
+  "results": [
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=778&SI=778&LCP=778&TBT=0&CLS=0.001&device=mobile&version=10",
+      "passed": false,
+      "violationCount": 1,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 778,
+        "CLS": 0.001,
+        "FCP": 778,
+        "SI": 778
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    },
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/about/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=779&SI=779&LCP=779&TBT=0&CLS=0&device=mobile&version=10",
+      "passed": true,
+      "violationCount": 0,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 779,
+        "CLS": 0,
+        "FCP": 779,
+        "SI": 779
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    },
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/blog/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=788&SI=788&LCP=1254&TBT=0&CLS=0&device=mobile&version=10",
+      "passed": true,
+      "violationCount": 0,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 1254,
+        "CLS": 0,
+        "FCP": 788,
+        "SI": 788
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    },
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/blog/first-post/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=780&SI=780&LCP=780&TBT=0&CLS=0&device=mobile&version=10",
+      "passed": true,
+      "violationCount": 0,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 780,
+        "CLS": 0,
+        "FCP": 780,
+        "SI": 780
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    },
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/blog/markdown-style-guide/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=855&SI=855&LCP=855&TBT=0&CLS=0.001&device=mobile&version=10",
+      "passed": false,
+      "violationCount": 1,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 855,
+        "CLS": 0.001,
+        "FCP": 855,
+        "SI": 855
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    },
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/blog/second-post/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=792&SI=792&LCP=792&TBT=0&CLS=0&device=mobile&version=10",
+      "passed": true,
+      "violationCount": 0,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 792,
+        "CLS": 0,
+        "FCP": 792,
+        "SI": 792
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    },
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/blog/third-post/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=782&SI=782&LCP=782&TBT=0&CLS=0&device=mobile&version=10",
+      "passed": true,
+      "violationCount": 0,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 782,
+        "CLS": 0,
+        "FCP": 782,
+        "SI": 782
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    },
+    {
+      "url": "https://blog-production.chadoakenfold.workers.dev/blog/using-mdx/",
+      "calculator": "https://googlechrome.github.io/lighthouse/scorecalc/#FCP=813&SI=813&LCP=1116&TBT=0&CLS=0&device=mobile&version=10",
+      "passed": true,
+      "violationCount": 0,
+      "medianLighthouseScore": 100,
+      "medianMetrics": {
+        "TBT": 0,
+        "LCP": 1116,
+        "CLS": 0,
+        "FCP": 813,
+        "SI": 813
+      },
+      "totalRuns": 3,
+      "successfulRuns": 3
+    }
+  ]
+}

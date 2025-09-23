@@ -22,7 +22,8 @@ export const config: Config = {
   isDev: DEV,
   analytics: {
     idGA4: PUBLIC_GA_ID,
-    shouldLoadGA4: PUBLIC_ENABLE_ANALYTICS === "true" && PUBLIC_GA_ID,
+    shouldLoadGA4:
+      PUBLIC_ENABLE_ANALYTICS === "true" && PUBLIC_GA_ID !== undefined,
     shouldEnableAnalytics: PUBLIC_ENABLE_ANALYTICS === "true",
     shouldEnableAnalyticsFE: PUBLIC_ENABLE_ANALYTICS_FE === "true",
     shouldEnableAnalyticsBE: PUBLIC_ENABLE_ANALYTICS_BE === "true",

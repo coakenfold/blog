@@ -7,13 +7,14 @@ import FallbackImage from "../assets/blog-placeholder-1.webp";
 import { SITE_TITLE } from "../consts";
 
 import {config} from '../config.ts';
-const { analytics, isDev } = config;
+const { analytics } = config;
 const {
   shouldLoadGA4,
   shouldEnableAnalyticsFE,
   idGA4,
   shouldEnableAnalytics,
 } = analytics;
+
 
 interface Props {
   title: string;
@@ -26,7 +27,7 @@ const { title, description, image = FallbackImage } = Astro.props;
 ---
 
 <!-- Font preloads -->
-<link
+<!-- <link
   rel="preload"
   href="/fonts/split/woff2/IBMPlexSans/IBMPlexSans-Bold-Latin1.woff2"
   as="font"
@@ -39,7 +40,7 @@ const { title, description, image = FallbackImage } = Astro.props;
   as="font"
   type="font/woff"
   crossorigin
-/>
+/> -->
 
 <link rel="preload" href="/styles/fonts.sans.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="preload" href="/styles/fonts.mono.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -67,13 +68,8 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta name="description" content={description} />
 
 <!-- ca.oakenfold.blog: global vars -->
-<script data-note="ca.oakenfold.blog" define:vars={{analytics, isDev}}>
-  window["ca.oakenfold.blog"] = {
-    isDev,
-    config: {
-      analytics
-    }
-  };
+<script data-note="ca.oakenfold.blog" define:vars={{config}}>
+  window["ca.oakenfold.blog"] = config;
 </script>
 
 {shouldLoadGA4 && shouldEnableAnalyticsFE && (
