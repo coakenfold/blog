@@ -12,4 +12,9 @@
     "enabled": true
   },
   "workers_dev": true,
+  "env": {
+    "development": {},
+    "staging": {},
+    "production": {}
+  }
 }
