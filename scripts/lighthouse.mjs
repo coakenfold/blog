@@ -181,6 +181,7 @@ class LighthouseSitemapTester {
       timestamp,
       results: this.results.map((r) => ({
         url: r.url,
+        calculator: `https://googlechrome.github.io/lighthouse/scorecalc/#FCP=${r.metrics.FCP}&SI=${r.metrics.SI}&LCP=${r.metrics.LCP}&TBT=${r.metrics.TBT}&CLS=${r.metrics.CLS}&device=mobile&version=10`,
         passed: r.passed,
         violationCount: r.violations.length,
         lighthouseScore: r.lighthouseScore,
