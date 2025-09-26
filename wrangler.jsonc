@@ -16,5 +16,12 @@
     "development": {},
     "staging": {},
     "production": {}
-  }
+  },
+    // Add this for your custom domain
+  "routes": [
+    {
+      "pattern": "blog.oakenfold.ca",
+      "custom_domain": true
+    }
+  ]
 }
