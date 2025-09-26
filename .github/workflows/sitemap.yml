@@ -46,7 +46,7 @@ jobs:
         # if: steps.sitemap-check.outputs.changed == 'true'
         run: |
           echo "Lighthouse performance testing..."
-          node run test:performance
+          npm run test:performance
 
       # # Optional: Commit any changes made by the script
       # - name: Commit changes (if any)
