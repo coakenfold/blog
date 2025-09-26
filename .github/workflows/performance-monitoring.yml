@@ -68,7 +68,7 @@ jobs:
           # Commit if there are changes
           git add reports/lighthouse/$TIMESTAMP
           git add src/assets/lighthouse-sitemap-tester-results.json
-          git add src/content/blog/03.01 automated lighthouse.mdx
+          git add 'src/content/blog/03.01 automated lighthouse.mdx'
 
           git diff --staged --quiet || git commit -m "[CI] Add Lighthouse reports for $TIMESTAMP; Update Frontmatter"
           git push
