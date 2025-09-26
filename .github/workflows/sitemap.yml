@@ -7,17 +7,6 @@ on:
   #   paths:
   #     - "dist/sitemap-0.xml"
   workflow_dispatch:
-    inputs:
-      force_run:
-        description: "Manual sitemap check"
-        required: false
-        default: false
-        type: boolean
-      branch:
-        description: "Branch to run on"
-        required: false
-        default: "main"
-        type: string
 jobs:
   detect-sitemap-changes:
     name: "Process Sitemap"
