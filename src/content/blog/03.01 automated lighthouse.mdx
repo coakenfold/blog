@@ -1,0 +1,54 @@
+---
+slug: "03-01"
+title: "03.01 Automated Lighthouse"
+description: " Automated Lighthouse"
+pubDate: "09-25-2025"
+author: "Chad Oakenfold"
+updatedDate: "2025-09-26T04:27:56.070Z"
+---
+import FormattedDate from "../../components/FormattedDate.astro";
+import sitemapTestResults from '../../assets/lighthouse-sitemap-tester-results.json';
+
+## Results
+
+<div class="analyticsTimestamp">Timestamp: <FormattedDate showTime={true} date={sitemapTestResults.timestamp} /></div>
+<div class="analyticsRunsPerUrl">Runs per url: {sitemapTestResults.runsPerUrl}</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>Performance Score</th>
+      <th>Total Blocking Time</th>
+      <th>Largest Contentful Paint</th>
+      <th>Cumulative Layout Shift </th>
+      <th>First Contentful Paint </th>
+      <th>Speed Index</th>
+    </tr>
+  </thead>
+  <tbody>
+    {sitemapTestResults.results.map(({
+      url,
+      calculator,
+      medianLighthouseScore,
+      medianMetrics
+    })=>{
+      let page = new URL(url).pathname;
+      return (
+      <tr>
+        <td><a href={url}>{page}</a></td>
+        <td><a href={calculator}>{medianLighthouseScore}</a></td>
+        <td>{medianMetrics.TBT}</td>
+        <td>{medianMetrics.LCP}</td>
+        <td>{medianMetrics.CLS}</td>
+        <td>{medianMetrics.FCP}</td>
+        <td>{medianMetrics.SI}</td>
+      </tr>
+      )
+    })}  
+  </tbody>
+</table>
+
+## 100s
+
+100s

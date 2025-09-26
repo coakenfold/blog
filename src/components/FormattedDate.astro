@@ -1,17 +1,27 @@
 ---
-interface Props {
-	date: Date;
+// FormattedDate.astro
+export interface Props {
+  date: string | Date;
+  showTime: boolean;
 }
 
-const { date } = Astro.props;
+const { date, showTime = false } = Astro.props;
+
+// Convert string to Date if needed
+const dateObj = typeof date === "string" ? new Date(date) : date;
+const isoString = dateObj.toISOString();
+const dateFormat = {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+
+if (showTime === true) {
+  dateFormat.hour = "numeric";
+  dateFormat.minute = "numeric";
+}
 ---
 
-<time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-		})
-	}
+<time datetime={isoString}>
+  {dateObj.toLocaleDateString("en-US", dateFormat)}
 </time>

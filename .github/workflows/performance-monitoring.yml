@@ -1,0 +1,73 @@
+# .github/workflows/sitemap-changes.yml
+name: Sitemap Change Detection
+
+on:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "dist/sitemap-0.xml"
+  workflow_dispatch:
+jobs:
+  detect-sitemap-changes:
+    name: "Process Sitemap"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch more history to compare with previous commits
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Set Timestamp Environment Variable
+        run: |
+          TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+          echo "Set environment timestamp: $TIMESTAMP"
+
+      - name: Run sitemap processing script
+        run: |
+          echo "Lighthouse performance testing..."
+          node ./scripts/lighthouse-sitemap-tester.js --output ./__generated__/lighthouse/$TIMESTAMP --runs 5
+
+      - name: Run sitemap processing script
+        run: |
+          echo "Update Frontmatter"
+          node ./scripts/update-lighthouse-frontmatter.js "./__generated__/lighthouse/$TIMESTAMP/summary.json"
+
+      - name: Upload Lighthouse Reports
+        uses: actions/upload-artifact@v4
+        if: always() # Run even if previous steps fail
+        with:
+          name: lighthouse-reports-${{ env.TIMESTAMP }}
+          path: ./__generated__/lighthouse/${{ env.TIMESTAMP }}/
+
+      - name: Commit Lighthouse Reports
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # Create reports directory if it doesn't exist
+          mkdir -p reports/lighthouse
+
+          # Copy reports with timestamp
+          cp -r ./__generated__/lighthouse/$TIMESTAMP reports/lighthouse/$TIMESTAMP
+
+          # Commit if there are changes
+          git add reports/lighthouse/$TIMESTAMP
+          git add src/content/blog/03.01 automated lighthouse.mdx
+
+          git diff --staged --quiet || git commit -m "[CI] Add Lighthouse reports for $TIMESTAMP; Update Frontmatter"
+          git push
