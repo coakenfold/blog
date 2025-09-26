@@ -10,8 +10,8 @@ const timestamp = new Date().toISOString();
 const timestampFilename = timestamp.slice(0, 19).replace(/[T:]/g, "-");
 // Results in: "2025-09-21-14-30-45" (removes milliseconds and Z)
 
-// Configuration
-const CONFIG = {
+// Default configuration
+const DEFAULT_CONFIG = {
   sitemapPath: "./dist/sitemap-0.xml",
   outputDir: `./__generated__/lighthouse/${timestampFilename}`,
   runs: 3, // Number of runs to perform for each URL
@@ -31,8 +31,102 @@ const CONFIG = {
   },
 };
 
+/**
+ * Parse command line arguments
+ */
+function parseArguments() {
+  const args = process.argv.slice(2);
+  const config = { ...DEFAULT_CONFIG };
+
+  // Show help if requested
+  if (args.includes("--help") || args.includes("-h")) {
+    console.log(`
+Lighthouse Sitemap Performance Tester
+
+Usage: node lighthouse-sitemap-tester.js [options]
+
+Options:
+  --sitemap <path>     Path to sitemap.xml file (default: ${DEFAULT_CONFIG.sitemapPath})
+  --output <dir>       Output directory for results (default: ${DEFAULT_CONFIG.outputDir})
+  --runs <number>      Number of runs per URL (default: ${DEFAULT_CONFIG.runs})
+  --cooldown <ms>      Cooldown between runs in milliseconds (default: ${DEFAULT_CONFIG.cooldownMs})
+  --help, -h           Show this help message
+
+Examples:
+  node lighthouse-sitemap-tester.js --sitemap ./sitemap.xml --output ./results --runs 5
+  node lighthouse-sitemap-tester.js --sitemap /path/to/sitemap.xml --runs 1
+`);
+    process.exit(0);
+  }
+
+  // Parse arguments
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    const nextArg = args[i + 1];
+
+    switch (arg) {
+      case "--sitemap":
+        if (!nextArg) {
+          console.error("Error: --sitemap requires a path argument");
+          process.exit(1);
+        }
+        config.sitemapPath = nextArg;
+        i++; // Skip next argument since we consumed it
+        break;
+
+      case "--output":
+        if (!nextArg) {
+          console.error("Error: --output requires a directory path argument");
+          process.exit(1);
+        }
+        config.outputDir = nextArg;
+        i++; // Skip next argument since we consumed it
+        break;
+
+      case "--runs":
+        if (!nextArg || isNaN(parseInt(nextArg, 10))) {
+          console.error("Error: --runs requires a valid number argument");
+          process.exit(1);
+        }
+        const runsValue = parseInt(nextArg, 10);
+        if (runsValue < 1) {
+          console.error("Error: --runs must be at least 1");
+          process.exit(1);
+        }
+        config.runs = runsValue;
+        i++; // Skip next argument since we consumed it
+        break;
+
+      case "--cooldown":
+        if (!nextArg || isNaN(parseInt(nextArg, 10))) {
+          console.error(
+            "Error: --cooldown requires a valid number argument (milliseconds)"
+          );
+          process.exit(1);
+        }
+        const cooldownValue = parseInt(nextArg, 10);
+        if (cooldownValue < 0) {
+          console.error("Error: --cooldown must be 0 or greater");
+          process.exit(1);
+        }
+        config.cooldownMs = cooldownValue;
+        i++; // Skip next argument since we consumed it
+        break;
+
+      default:
+        if (arg.startsWith("--")) {
+          console.error(`Error: Unknown option '${arg}'`);
+          console.error("Use --help to see available options");
+          process.exit(1);
+        }
+    }
+  }
+
+  return config;
+}
+
 class LighthouseSitemapTester {
-  constructor(config = CONFIG) {
+  constructor(config = DEFAULT_CONFIG) {
     this.config = config;
     this.results = [];
     this.violations = [];
@@ -307,6 +401,10 @@ class LighthouseSitemapTester {
 
     const summaryPath = path.join(this.config.outputDir, "summary.json");
     await fs.writeFile(summaryPath, JSON.stringify(summary, null, 2));
+    const summaryPathAssets = path.join(
+      "src/assets/lighthouse-sitemap-tester-results.json"
+    );
+    await fs.writeFile(summaryPathAssets, JSON.stringify(summary, null, 2));
 
     // Console summary
     console.log("\n📊 SUMMARY REPORT");
@@ -388,26 +486,6 @@ class LighthouseSitemapTester {
 }
 
 // CLI execution
-
-// Allow configuration override via command line arguments
-const args = process.argv.slice(2);
-let customConfig = { ...CONFIG };
-
-// Simple argument parsing
-args.forEach((arg, index) => {
-  if (arg === "--sitemap" && args[index + 1]) {
-    customConfig.sitemapPath = args[index + 1];
-  }
-  if (arg === "--output" && args[index + 1]) {
-    customConfig.outputDir = args[index + 1];
-  }
-  if (arg === "--runs" && args[index + 1]) {
-    customConfig.runs = parseInt(args[index + 1], 10);
-  }
-  if (arg === "--cooldown" && args[index + 1]) {
-    customConfig.cooldownMs = parseInt(args[index + 1], 10);
-  }
-});
-
-const tester = new LighthouseSitemapTester(customConfig);
+const config = parseArguments();
+const tester = new LighthouseSitemapTester(config);
 tester.run();
