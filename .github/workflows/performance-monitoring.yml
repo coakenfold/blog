@@ -7,6 +7,10 @@ on:
   #   paths:
   #     - "dist/sitemap-0.xml"
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   detect-sitemap-changes:
     name: "Process Sitemap"
@@ -70,5 +74,5 @@ jobs:
           git add src/assets/lighthouse-sitemap-tester-results.json
           git add 'src/content/blog/03.01 automated lighthouse.mdx'
 
-          git diff --staged --quiet || git commit -m "[CI] Add Lighthouse reports for $TIMESTAMP; Update Frontmatter"
+          git diff --staged --quiet || git commit -m "[ci] Add Lighthouse reports for $TIMESTAMP; Update Frontmatter"
           git push
