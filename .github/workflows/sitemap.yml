@@ -1,0 +1,76 @@
+# .github/workflows/sitemap-changes.yml
+name: Sitemap Change Detection
+
+on:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "dist/sitemap-0.xml"
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: "Manual sitemap check"
+        required: false
+        default: false
+        type: boolean
+      branch:
+        description: "Branch to run on"
+        required: false
+        default: "main"
+        type: string
+jobs:
+  detect-sitemap-changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch more history to compare with previous commits
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24" # Adjust version as needed
+          cache: "npm" # or 'yarn' if you use yarn
+
+      - name: Install dependencies
+        run: npm ci # or npm install, or yarn install
+
+      - name: Build
+        run: npm run build
+
+      - name: Check if sitemap-0.xml has changed
+        id: sitemap-check
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q "dist/sitemap-0.xml"; then
+            echo "Sitemap has changed"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Sitemap unchanged"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run sitemap processing script
+        if: steps.sitemap-check.outputs.changed == 'true'
+        run: |
+          echo "Lighthouse performance testing..."
+          node run test:performance
+
+      # # Optional: Commit any changes made by the script
+      # - name: Commit changes (if any)
+      #   if: steps.sitemap-check.outputs.changed == 'true'
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+      #     git add .
+      #     git diff --staged --quiet || git commit -m "Auto-update from sitemap changes [skip ci]"
+
+      # # Optional: Push changes back (be careful with this)
+      # - name: Push changes
+      #   if: steps.sitemap-check.outputs.changed == 'true'
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
