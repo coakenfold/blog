@@ -12,7 +12,7 @@ dotenv.config();
 
 // https://astro.build/config
 export default defineConfig({
-  site: process.env.PUBLIC_SITE_URL || "https://localhost:4321",
+  site: process.env.PUBLIC_SITE_URL || "https://blog.oakenfold.ca/",
   integrations: [mdx(), sitemap()],
 
   adapter: cloudflare(),
