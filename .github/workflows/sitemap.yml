@@ -41,19 +41,19 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Check if sitemap-0.xml has changed
-        id: sitemap-check
-        run: |
-          if git diff --name-only HEAD~1 HEAD | grep -q "dist/sitemap-0.xml"; then
-            echo "Sitemap has changed"
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "Sitemap unchanged"
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+      # - name: Check if sitemap-0.xml has changed
+      #   id: sitemap-check
+      #   run: |
+      #     if git diff --name-only HEAD~1 HEAD | grep -q "dist/sitemap-0.xml"; then
+      #       echo "Sitemap has changed"
+      #       echo "changed=true" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "Sitemap unchanged"
+      #       echo "changed=false" >> $GITHUB_OUTPUT
+      #     fi
 
       - name: Run sitemap processing script
-        if: steps.sitemap-check.outputs.changed == 'true'
+        # if: steps.sitemap-check.outputs.changed == 'true'
         run: |
           echo "Lighthouse performance testing..."
           node run test:performance
