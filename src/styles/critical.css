@@ -13,6 +13,8 @@
 
   --accent: #2337ff;
   --base: #2337ff;
+
+  --blue-deep: rgb(15 23 42 / 1);
 }
 body {
   font-family: "IBM Plex Sans", system-ui, sans-serif;
@@ -22,6 +24,7 @@ body {
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: rgb(var(--gray-dark));
+  /* background-color: var(--base-green); */
   font-size: 20px;
   line-height: 1.7;
 }
