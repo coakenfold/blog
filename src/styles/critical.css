@@ -23,8 +23,7 @@ body {
   text-align: left;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  color: rgb(var(--gray-dark));
-  /* background-color: var(--base-green); */
+  color: var(--blue-deep);
   font-size: 20px;
   line-height: 1.7;
 }
@@ -37,14 +36,24 @@ a:hover {
 main {
   margin: 5rem;
 }
+
 img[data-full-width="true"] {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   max-width: none;
 }
+main hr {
+  border: none;
+  height: 1px;
+  background: var(--blue-deep);
+  border-radius: 5px;
+}
 
 @media (max-width: 720px) {
   body {
     font-size: 18px;
+  }
+  main {
+    margin: 1rem;
   }
 }

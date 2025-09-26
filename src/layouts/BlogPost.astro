@@ -14,10 +14,8 @@ const {
   heroImageHeight,
   heroImageWidth,
   pubDate,
-  pubDateAuthor,
+  author,
   title,
-  upDate,
-  upDateAuthor,
   updatedDate,
 } = Astro.props;
 ---
@@ -55,14 +53,13 @@ const {
           )
         }
         <div class="date-created">
-          <FormattedDate date={pubDate} /> -
-          <span class="pubDateAuthor">{pubDateAuthor}</span>
+          <FormattedDate date={pubDate} />
+          {author && -(<span class="pubDateAuthor">{author}</span>)}
         </div>
         {
           updatedDate && (
             <div class="date-updated">
-              Last updated on <FormattedDate date={updatedDate} /> by
-              <span class="upDateAuthor">{upDateAuthor}</span>
+              Last update <FormattedDate date={updatedDate} />
             </div>
           )
         }
@@ -75,5 +72,13 @@ const {
       </article>
     </main>
     <Footer />
+    <style>
+      .date-created {
+        font-size: medium;
+      }
+      .date-updated {
+        font-size: small;
+      }
+    </style>
   </body>
 </html>
