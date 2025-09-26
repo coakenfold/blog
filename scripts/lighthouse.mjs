@@ -17,11 +17,11 @@ const CONFIG = {
   runs: 3, // Number of runs to perform for each URL
   cooldownMs: 2000, // Cooldown between runs in milliseconds
   thresholds: {
-    TBT: { max: 0, violationHandler: "console.error" }, // Total Blocking Time
-    LCP: { max: 1514, violationHandler: "console.error" }, // Largest Contentful Paint
-    CLS: { max: 0.0, violationHandler: "console.error" }, // Cumulative Layout Shift
-    FCP: { max: 1514, violationHandler: "console.error" }, // First Contentful Paint
-    SI: { max: 1514, violationHandler: "console.error" }, // Speed Index
+    TBT: { max: 0, violationHandler: "console.log" }, // Total Blocking Time
+    LCP: { max: 1514, violationHandler: "console.log" }, // Largest Contentful Paint
+    CLS: { max: 0.0, violationHandler: "console.log" }, // Cumulative Layout Shift
+    FCP: { max: 1514, violationHandler: "console.log" }, // First Contentful Paint
+    SI: { max: 1514, violationHandler: "console.log" }, // Speed Index
   },
   chromeFlags: ["--headless", "--disable-gpu", "--no-sandbox"],
   lighthouseOptions: {
@@ -202,7 +202,7 @@ class LighthouseSitemapTester {
 
     for (let i = 1; i <= this.config.runs; i++) {
       try {
-        console.log(`  📊 Run ${i}/${this.config.runs}...`);
+        console.log(`📊 Run ${i}/${this.config.runs}...`);
 
         const lighthouseResult = await this.runLighthouseTest(url);
         const metrics = this.extractMetrics(lighthouseResult);
