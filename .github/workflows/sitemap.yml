@@ -20,6 +20,7 @@ on:
         type: string
 jobs:
   detect-sitemap-changes:
+    name: "Process Sitemap"
     runs-on: ubuntu-latest
 
     steps:
