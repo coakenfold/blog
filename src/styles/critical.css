@@ -41,6 +41,7 @@ img[data-full-width="true"] {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   max-width: none;
+  height: auto;
 }
 main hr {
   border: none;
