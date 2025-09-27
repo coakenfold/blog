@@ -1,6 +1,6 @@
 /* Subset: Cyrillic */
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 300;
@@ -11,7 +11,7 @@
 }
 /* Subset: Greek */
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 300;
@@ -21,7 +21,7 @@
 }
 /* Subset: Latin1 */
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 300;
@@ -33,7 +33,7 @@
 }
 /* Subset: Latin2 */
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 300;
@@ -46,7 +46,7 @@
 }
 /* Subset: Latin3 */
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 300;
@@ -56,7 +56,7 @@
 }
 /* Subset: Pi */
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 300;

@@ -15,6 +15,9 @@
   --base: #2337ff;
 
   --blue-deep: rgb(15 23 42 / 1);
+
+  --font-display-p1: swap;
+  --font-display-p2: fallback;
 }
 body {
   font-family: "IBM Plex Sans", system-ui, sans-serif;

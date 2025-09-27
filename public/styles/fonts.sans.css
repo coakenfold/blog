@@ -1,5 +1,5 @@
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 400;
@@ -14,7 +14,7 @@
     U+ECE0, U+EFCC;
 }
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 400;
@@ -28,7 +28,7 @@
 }
 
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 400;
@@ -43,7 +43,7 @@
     U+ECE0, U+EFCC;
 }
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 400;
@@ -56,7 +56,7 @@
     U+2212, U+FB01-FB02;
 }
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 700;
@@ -71,9 +71,7 @@
     U+ECE0, U+EFCC;
 }
 @font-face {
-  /* -10ms w/block */
-  font-display: block;
-  /* font-display: swap; */
+  font-display: var(--font-display-p1);
   font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 700;
@@ -86,7 +84,7 @@
     U+2212, U+FB01-FB02;
 }
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 700;
@@ -101,7 +99,7 @@
     U+ECE0, U+EFCC;
 }
 @font-face {
-  font-display: swap;
+  font-display: var(--font-display-p2);
   font-family: "IBM Plex Sans";
   font-style: italic;
   font-weight: 700;
