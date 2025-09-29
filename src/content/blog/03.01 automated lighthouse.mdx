@@ -9,21 +9,28 @@ updatedDate: "2025-09-28T13:09:23.110Z"
 import FormattedDate from "../../components/FormattedDate.astro";
 import sitemapTestResults from '../../assets/lighthouse-sitemap-tester-results.json';
 
+[A script](https://github.com/coakenfold/blog/blob/main/scripts/lighthouse-sitemap-tester.js) uses the sitemap from a build to visit all the pages and run Lighthouse performance tests
+
+The pages are tested multiple times and the median value is calculated. A summary is saved to [`src/assets/lighthouse-sitemap-tester-results.json`](https://github.com/coakenfold/blog/blob/main/src/assets/lighthouse-sitemap-tester-results.json) where it is loaded by [this blog post](https://github.com/coakenfold/blog/blob/main/src/content/blog/03.01%20automated%20lighthouse.mdx?plain=1#L10)
+
+This [Github Workflow](https://github.com/coakenfold/blog/blob/main/.github/workflows/sitemap-performance-testing.yml) file starts the [tests](https://github.com/coakenfold/blog/blob/main/.github/workflows/sitemap-performance-testing.yml#L44) and [updates](https://github.com/coakenfold/blog/blob/main/.github/workflows/sitemap-performance-testing.yml#L48) the `updatedDate` frontmatter for this page
+
+
 ## Results
 
-<div class="analyticsTimestamp">Timestamp: <FormattedDate showTime={true} date={sitemapTestResults.timestamp} /></div>
-<div class="analyticsRunsPerUrl">Runs per url: {sitemapTestResults.runsPerUrl}</div>
+<div class="analyticsTimestamp">**On:** <FormattedDate showTime={true} date={sitemapTestResults.timestamp} /></div>
+<div class="analyticsRunsPerUrl">**Runs per url:** {sitemapTestResults.runsPerUrl}</div>
 
-<table>
+<table data-zebra data-hover-tr>
   <thead>
     <tr>
       <th>URL</th>
       <th>Performance Score</th>
-      <th>Total Blocking Time</th>
-      <th>Largest Contentful Paint</th>
-      <th>Cumulative Layout Shift </th>
-      <th>First Contentful Paint </th>
-      <th>Speed Index</th>
+      <th><abbr title="Total Blocking Time">TBT</abbr></th>
+      <th><abbr title="Largest Contentful Paint">LCP</abbr></th>
+      <th><abbr title="Cumulative Layout Shift">CLS</abbr> </th>
+      <th><abbr title="First Contentful Paint">FCP</abbr> </th>
+      <th><abbr title="Speed Index">SI</abbr></th>
     </tr>
   </thead>
   <tbody>
