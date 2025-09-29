@@ -11,16 +11,48 @@ updatedDate: "09-25-2025"
 import { Image } from "astro:assets";
 import systemArch from '../../assets/system-architecture.webp';
 
-The <abbr title="Minimal Viable Product">MVP</abbr> of the Multitenant Analytics Application (MtAA) is a dashboard for a Law Firm. The system will support <a href="https://en.wikipedia.org/wiki/Multitenancy">multitenancy</a>, analytics, and essential admin features.
+The <abbr title="Minimal Viable Product">MVP</abbr> of the Multitenant Analytics Application (MtAA) will be a dashboard for a Law Firm to track case metrics
 
-Phases:
+## Core Features
 
-- Phase 1: Foundation &amp; Parallel FE/BE Setup
-- Phase 2: Authentication &amp; Multitenancy
-- Phase 3: Analytics Foundation &amp; Core Visualization
-- Phase 4: Law Firm Features &amp; Performance
-- Phase 5: Core User Management
-- Phase 6: Analytics &amp; Advanced Features
+### User Facing Dashboard
+
+- Data visualization using web components (real-time?)
+- Customizable components with a drag and drop interface
+
+### Internal Admin Tools
+
+- User management
+- Permissions and role-based access control
+- A/B testing configuration interface
+- Analytics of dashboard usage
+
+## Technology
+
+- Nest.js
+- TypeORM
+- PostgreSQL
+- Redis
+- Docker
+- GraphQL
+- WebSocket
+- Astro
+- Webcomponents
+
+## Performance
+
+- <abbr title="DONE">🟢</abbr> [Web vitals monitoring](/blog/03-01)
+- Progressive web app capabilities
+- Optimistic UI updates
+- Mobile first
+- Lazy loading, code splitting, virutalization of large tables, etc
+
+## Accessibility
+
+- Dark/light theme toggle
+- Keyboard navigation
+- WCAG version 2
+- Screen reader support
 
 ## Architecture
 
@@ -30,5 +62,14 @@ Phases:
     fetchpriority="low"
     loading="lazy"
     layout='full-width'
-    data-full-width="true"
+    data-full-width
 />
+
+## Phases
+
+- Phase 1: Foundation &amp; Parallel FE/BE Setup
+- Phase 2: Authentication &amp; Multitenancy
+- Phase 3: Analytics Foundation &amp; Core Visualization
+- Phase 4: Law Firm Features &amp; Performance
+- Phase 5: Core User Management
+- Phase 6: Analytics &amp; Advanced Features
