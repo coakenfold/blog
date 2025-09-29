@@ -43,7 +43,7 @@ jobs:
 
       - name: Lighthouse Performance Testing
         run: |
-          node ./scripts/lighthouse-sitemap-tester.js --output ./__generated__/lighthouse/$TIMESTAMP --runs 5
+          node ./scripts/lighthouse-sitemap-tester.js --output ./__generated__/lighthouse/$TIMESTAMP --runs 3
 
       - name: Update Frontmatter for Blog Post
         run: |
