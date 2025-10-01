@@ -43,7 +43,7 @@ This [Github Workflow](https://github.com/coakenfold/blog/blob/main/.github/work
       let page = new URL(url).pathname;
       return (
       <tr>
-        <td><a href={url}>{page}</a></td>
+        <td><a href={url}>{page === '/' ? 'Home':page}</a></td>
         <td><a href={calculator}>{medianLighthouseScore}</a></td>
         <td>{medianMetrics.TBT}</td>
         <td>{medianMetrics.LCP}</td>
