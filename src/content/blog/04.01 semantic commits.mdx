@@ -1,0 +1,201 @@
+---
+slug: "04-01"
+title: "04.01 Semantic Commits"
+description: "Autogenerating release notes"
+pubDate: "09-30-2025"
+author: "Chad Oakenfold"
+updatedDate: "09-30-2025"
+---
+
+import { Image } from "astro:assets";
+
+System to automatically generate release notes from semantic commit messages
+
+## Commit Message Conventions
+
+```
+<type>(<scope>): <description>
+
+<body>
+
+<footer>
+```
+
+Required fields are:
+
+- `<type>`: the type of change
+- `<description>`: brief summary of changes (50 chars max)
+
+Optional fields are:
+
+- `(<scope>)`: component or module affected, eg: auth, api, ui, header, etc
+- `<body>`: detailed explanation
+- `<footer>`: additional metadata (breaking changes, issue links)
+
+## Commit Types
+
+<table data-zebra data-hover-tr cellspacing="0">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Release Notes Section</th>
+      <th>Version Impact</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>feat</code></td>
+      <td>New feature</td>
+      <td>Features</td>
+      <td>Minor</td>
+    </tr>
+    <tr>
+      <td><code>fix</code></td>
+      <td>Bug fix</td>
+      <td>Bug Fixes</td>
+      <td>Patch</td>
+    </tr>
+    <tr>
+      <td><code>perf</code></td>
+      <td>Performance improvement</td>
+      <td>Performance</td>
+      <td>Patch</td>
+    </tr>
+    <tr>
+      <td><code>revert</code></td>
+      <td>Revert previous commit</td>
+      <td>Reverts</td>
+      <td>TBD</td>
+    </tr>
+    <tr>
+      <td><code>build</code></td>
+      <td>Build system changes</td>
+      <td>Build</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><code>chore</code></td>
+      <td>Maintenance tasks</td>
+      <td>Chores</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><code>ci</code></td>
+      <td>CI configuration changes</td>
+      <td>CI</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><code>docs</code></td>
+      <td>Documentation</td>
+      <td>Documentation</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><code>refactor</code></td>
+      <td>Code refactoring</td>
+      <td>Refactoring</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><code>style</code></td>
+      <td>Code style (formatting, etc)</td>
+      <td>Style</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><code>test</code></td>
+      <td>Adding/updating tests</td>
+      <td>Tests</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+
+## Breaking Changes
+
+- Add `!` after type: `feat!: redesign user auth`
+- or use footer: `BREAKING CHANGE: redesign user auth`
+
+## Examples
+
+```bash
+# Feature with scope
+feat(auth): add oauth2
+
+# Bug fix with scope and link to issue in footer
+fix(api): resolve memory issue in user server
+
+Fixes #123
+
+# Breaking changes
+feat(api)!: redesign user endpoint
+```
+
+## Versioning logic
+
+- Major: Contains breaking change (`!` or `BREAKING CHANGE`)
+- Minor: Contains new features (`feat`)
+- Patch: Contains: `fix`, `perf`, `revert` (if applicable)
+
+## Libraries
+
+- [Semantic Release](https://github.com/semantic-release/semantic-release) to generate release note pages in Github
+- [Husky](https://github.com/typicode/husky) to enforce Semantic Release commit messages
+
+## Github Workflow
+
+Created a Workflow file that creates release notes when there are pushes to a `release` branch:
+
+```yml
+name: Generate Release Notes
+on:
+  push:
+    branches:
+      - release
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    name: Generate Release Notes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+```
+
+## Result
+
+<Image
+    src="/images/semantic-release.webp"
+    alt="Semantic Release output showing v1.0.0"
+    fetchpriority="low"
+    loading="lazy"
+    width={1047}
+    height={1167}
+    layout='full-width'
+    data-full-width
+    style="margin-top: -3rem;"
+/>

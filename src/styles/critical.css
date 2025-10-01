@@ -37,7 +37,9 @@ a:hover {
   color: var(--accent-blue);
 }
 main {
-  margin: 5rem;
+  margin: 0 auto;
+  max-width: 75rem;
+  padding: 5rem;
 }
 
 main img[data-full-width] {
@@ -54,7 +56,9 @@ table {
 table[data-zebra] tbody tr:nth-child(even) {
   background-color: #f8f9fa;
 }
-
+table[data-zebra] td {
+  padding: 0.3rem 0.6rem;
+}
 table[data-hover-tr] tbody tr:hover {
   background-color: #e9ecef;
   cursor: pointer;
@@ -67,12 +71,15 @@ main hr {
   border-radius: 5px;
 }
 
+pre.astro-code {
+  padding: 2rem;
+}
 @media (max-width: 720px) {
   body {
     font-size: 18px;
   }
   main {
-    margin: 1rem;
+    padding: 1rem;
   }
   main img[data-full-width] {
     height: auto;
