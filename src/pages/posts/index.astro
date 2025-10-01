@@ -20,7 +20,7 @@ const posts = (await getCollection("blog")).sort((a, b) =>
 <html lang="en">
   <head>
     <BaseHead
-      title={`Blog • Devlog • Oakenfold.ca`}
+      title={`Posts • Devlog • Oakenfold.ca`}
       description={SITE_DESCRIPTION}
     />
   </head>
@@ -28,13 +28,13 @@ const posts = (await getCollection("blog")).sort((a, b) =>
     <Header />
 
     <main>
-<h1>Blog</h1>
+      <h1>Posts</h1>
       <section>
         <ul>
           {
             posts.map((post) => (
               <li>
-                <a href={`/blog/${post.id}/`}>
+                <a href={`/posts/${post.id}/`}>
                   {post.data.heroImage && (
                     <Image
                       width={720}
